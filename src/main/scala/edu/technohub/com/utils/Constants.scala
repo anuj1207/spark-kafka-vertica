@@ -9,6 +9,8 @@ object Constants {
   val VALUE = "value"
   val ERROR_LOG_LEVEL = "ERROR"
 
+  val TEN_SECONDS = "10 seconds"
+
   val BROKER = "localhost:9092"
   val TOPIC = "sample-topic"
   val GROUP_ID = "kafka-group"
@@ -17,7 +19,13 @@ object Constants {
   val KAFKA_SOURCE = "kafka"
   val VERTICA_SOURCE = "com.vertica.spark.datasource.DefaultSource"
 
+  val ID = "id"
   val NAME = "name"
   val AGE = "age"
+
+  val PERSON_ID = "personId"
+  val KCAL_BURNED = "kCalBurned"
+  val ACTIVITY_DURATION = "activityDuration"
+  val TIMESTAMP = "timestamp"
 
 }
