@@ -9,7 +9,7 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql.streaming.{OutputMode, StreamingQuery, Trigger}
 import org.apache.spark.sql.streaming.OutputMode.Append
 import org.apache.spark.sql.types.StructType
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
 import scala.concurrent.duration._
 
@@ -71,6 +71,25 @@ class SparkService(val inbound: Source, val outbound: Source) extends Logging {
       .options(opts)
       //      .trigger(Trigger.ProcessingTime(triggeringTime)) //TODO:check::Enable this to enable triggering after a certain time
       .outputMode(mode).start()
+
+  /**
+    * Applies watermarking on late data and drop the late data exceeding threshold
+    * @param dataFrame
+    * @param timeColumn name of the column which describes the event time
+    * @param threshold  Threshold time after which all the data is rejected {ex: "10 seconds" or "10 minutes"}
+    * @return
+    */
+  def watermarkingOperation(dataFrame: DataFrame, timeColumn: String = TIMESTAMP, threshold: String = TEN_SECONDS): DataFrame =
+    dataFrame.withWatermark(timeColumn, threshold)
+
+  /**
+    * Remove duplicate data over given columns
+    * @param dataFrame
+    * @param columns    The columns which needs to be considered for removing duplicates
+    * @return
+    */
+  def deduplicateOption(dataFrame: DataFrame, columns: List[String] = List(PERSON_ID, TIMESTAMP)): Dataset[Row] =
+    dataFrame.dropDuplicates(columns)
 
   /**
     * To parse data of one column of specified DataFrame into a given schema
