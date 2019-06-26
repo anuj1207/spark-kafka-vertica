@@ -24,8 +24,10 @@ trait Source {
   /**
     * Read data as dataFrame from source, using class from Source spark connector jar and above properties
     *
-    * @param sparkSession object of SparkSession which basically represents the master in spark SQL
+    * @param sparkSession The object of SparkSession or the master
     * @param opts         properties required by spark to read data from source
+    * @param format       The format of the source from where data is read as DataFrame
+    * @return             DataFrame referencing to the actual data
     */
   def readFromSource(sparkSession: SparkSession, opts: Map[String, String] = sourceOptions, format: String = dataSource): DataFrame = {
     sparkSession.read.format(format).options(opts).load()
@@ -34,10 +36,10 @@ trait Source {
   /**
     * Save dataFrame to source, using class from Source spark connector jar and above properties
     *
-    * @param dataFrame flattened dataFrame with metadata and sensor values
+    * @param dataFrame The DataFrame which needs to be saved
     * @param opts      properties required by spark to save data to source
-    * @param mode      By default Append mode: when saving a DataFrame to a data source, if data/table already exists,
-    *                  contents of the DataFrame are expected to be appended to existing data.
+    * @param format    The format of the data source where the data needs to be saved
+    * @param mode      the expected behavior of saving a DataFrame to a data source (append / overwrite etc)
     */
   def saveToSource(dataFrame: DataFrame, opts: Map[String, String] = sinkOptions, format: String = dataSource, mode: SaveMode = Append): Unit = {
     dataFrame.write.format(format).options(opts).mode(mode).save()
