@@ -14,9 +14,9 @@ object StructuredStreamingKafkaToVerticaApplication extends SparkService(new Kaf
   val parsedDataFrame: DataFrame = df.transform(parseFromOneColumn(_, Activity.schema)) //TODO::check::Use the schema of your model here
 
   val transformedDF: DataFrame = parsedDataFrame
-//    .transform(deduplicateOption(_)) //TODO::check::Enable this to start deduplication
-    .transform(transformationLogic) //TODO::check::Add you logic inside `transformationLogic`
 //    .transform(watermarkingOperation(_)) //TODO::check::Enable this to start watermarking to drop late data
+//    .transform(deduplicateOperation(_)) //TODO::check::Enable this to start deduplication
+    .transform(transformationLogic) //TODO::check::Add you logic inside `transformationLogic`
 
   customWriteStreamingDF(transformedDF).awaitTermination()
 

@@ -88,7 +88,7 @@ class SparkService(val inbound: Source, val outbound: Source) extends Logging {
     * @param columns    The columns which needs to be considered for removing duplicates
     * @return
     */
-  def deduplicateOption(dataFrame: DataFrame, columns: List[String] = List(PERSON_ID, TIMESTAMP)): Dataset[Row] =
+  def deduplicateOperation(dataFrame: DataFrame, columns: List[String] = List(PERSON_ID, TIMESTAMP)): Dataset[Row] =
     dataFrame.dropDuplicates(columns)
 
   /**
