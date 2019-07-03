@@ -5,6 +5,12 @@ import edu.technohub.com.services.SparkService
 import edu.technohub.com.sources.{KafkaSource, VerticaSource}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
+/**
+  * This application receives data from Kafka and saves it to Vertica in Streaming mode
+  * through Structured Streaming
+  * Can plug in watermarking / deduplication in this application
+  * Can also add some logic accordingly
+  */
 object StructuredStreamingKafkaToVerticaApplication extends SparkService(new KafkaSource, new VerticaSource) with App{
 
   val spark: SparkSession = createSparkSession()

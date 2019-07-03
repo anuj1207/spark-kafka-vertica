@@ -8,7 +8,7 @@ import org.apache.spark.SparkConf
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.streaming.{OutputMode, StreamingQuery, Trigger}
 import org.apache.spark.sql.streaming.OutputMode.Append
-import org.apache.spark.sql.types.StructType
+import org.apache.spark.sql.types.{StringType, StructType}
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
 import scala.concurrent.duration._
@@ -99,9 +99,9 @@ class SparkService(val inbound: Source, val outbound: Source) extends Logging {
     * @return           The parsed DataFrame which will have the same columns as schema
     */
   def parseFromOneColumn(dataFrame: DataFrame, schema: StructType, columnName: String = VALUE): DataFrame =
-    dataFrame.selectExpr(s"CAST($columnName AS STRING)")
+    dataFrame.select(col(columnName).cast(StringType))
       .select(from_json(col(columnName), schema).as(columnName))
-      .select(col(s"$columnName.*"))
+      .select(col(columnName + ".*"))
 
   /**
     * Merging all values as JSON into one column value

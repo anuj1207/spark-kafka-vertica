@@ -6,18 +6,16 @@ import edu.technohub.com.sources.{KafkaSource, VerticaSource}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 /**
-  * This Application is to read data from Vertica source and dump that data into kafka in batch mode
+  * This application reads data to Kafka and saves it to Vertica in Batch mode
   * Can add some logic here accordingly
-  * */
-object VerticaToKafkaApplication extends SparkService(new VerticaSource, new KafkaSource) with App{
+  */
+object KafkaToVerticaApplication extends SparkService(new KafkaSource, new VerticaSource) with App{
 
   val spark: SparkSession = createSparkSession()
 
-  val df: DataFrame = inbound.readFromSource(spark)
+  val df: DataFrame = inbound.readFromSource(spark, inbound.sourceOptions)
 
-  private val fieldNames = Person.schema.fieldNames.toList
-
-  val parsedDataFrame: DataFrame = df.transform(mergeIntoOneColumn(_, fieldNames, "value")) //Kafka needs a `value` field when dumping data
+  val parsedDataFrame = df.transform(parseFromOneColumn(_, Person.schema))
 
   val transformedDF: DataFrame = parsedDataFrame.transform(transformationLogic) //TODO::check::Add you logic inside `transformationLogic`
 
