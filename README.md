@@ -26,7 +26,7 @@ directly without any custom writing
 #### To run this application:
 
 **sbt
-"edu.technohub.com.app.streaming.structured.StructuredStreamingKafkaToVerticaApplication"**
+"runMain edu.technohub.com.app.streaming.structured.StructuredStreamingKafkaToVerticaApplication"**
 ***
 
 ### 2. VerticaToKafkaApplication
